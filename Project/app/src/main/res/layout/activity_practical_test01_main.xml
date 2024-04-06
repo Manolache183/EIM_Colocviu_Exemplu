@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PracticalTest01MainActivity">
+
+    <Button
+        android:id="@+id/navigateToSecondaryActivityButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NAVIGATE TO SECONDARY ACTIVITY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LinerLayout1"
+        app:layout_constraintTop_toBottomOf="@id/navigateToSecondaryActivityButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+        <EditText
+            android:id="@+id/editTextLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:enabled="false"
+            android:saveEnabled="false"
+            android:text="0"
+            tools:layout_editor_absoluteX="-5dp"
+            tools:layout_editor_absoluteY="88dp" />
+
+        <EditText
+            android:id="@+id/editTextRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="text"
+            android:enabled="false"
+            android:saveEnabled="false"
+            android:text="0"
+            tools:layout_editor_absoluteX="204dp"
+            tools:layout_editor_absoluteY="88dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/LinerLayout1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+        <Button
+            android:id="@+id/pressMeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PRESS ME!"
+            tools:layout_editor_absoluteX="34dp"
+            tools:layout_editor_absoluteY="168dp" />
+
+        <Button
+            android:id="@+id/pressMeTooButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PRESS ME, TOO!"
+            tools:layout_editor_absoluteX="233dp"
+            tools:layout_editor_absoluteY="200dp" />
+
+    </LinearLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

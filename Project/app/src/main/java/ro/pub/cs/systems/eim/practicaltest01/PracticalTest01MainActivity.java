@@ -1,8 +1,12 @@
 package ro.pub.cs.systems.eim.practicaltest01;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,10 +30,26 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
 
     ActivityResultLauncher<Intent> activityResultLauncher;
 
+    private MessageBroadcastReceiver messageBroadcastReceiver = new MessageBroadcastReceiver();
+    private class MessageBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(Constants.BROADCAST_RECEIVER_TAG, intent.getStringExtra(Constants.BROADCAST_RECEIVER_EXTRA));
+        }
+    }
+
+    private IntentFilter intentFilter = new IntentFilter();
+
+    boolean startedService = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practical_test01_main);
+
+        for (int index = 0; index < Constants.actionTypes.length; index++) {
+            intentFilter.addAction(Constants.actionTypes[index]);
+        }
 
         navigateToSecondaryActivityButton = findViewById(R.id.navigateToSecondaryActivityButton);
         clickMeButton = findViewById(R.id.pressMeButton);
@@ -41,14 +61,30 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
         rightEditText.setText("0");
 
         clickMeButton.setOnClickListener(view -> {
-            String leftEditTextValue = leftEditText.getText().toString();
-            int leftNumber = Integer.parseInt(leftEditTextValue);
+            int leftNumber = Integer.parseInt(leftEditText.getText().toString());
+            int rightNumber = Integer.parseInt(rightEditText.getText().toString());
+            if (leftNumber + rightNumber > Constants.NUMBER_OF_CLICKS_THRESHOLD && !startedService) {
+                Intent intent = new Intent(getApplicationContext(), PracticalTest01Service.class);
+                intent.putExtra(Constants.LEFT_COUNT, leftNumber);
+                intent.putExtra(Constants.RIGHT_COUNT, rightNumber);
+                startedService = true;
+                getApplicationContext().startService(intent);
+            }
+
             leftEditText.setText(String.valueOf(leftNumber + 1));
         });
 
         clickMeTooButton.setOnClickListener(view -> {
-            String rightEditTextValue = rightEditText.getText().toString();
-            int rightNumber = Integer.parseInt(rightEditTextValue);
+            int leftNumber = Integer.parseInt(leftEditText.getText().toString());
+            int rightNumber = Integer.parseInt(rightEditText.getText().toString());
+            if (leftNumber + rightNumber > Constants.NUMBER_OF_CLICKS_THRESHOLD && !startedService) {
+                Intent intent = new Intent(getApplicationContext(), PracticalTest01Service.class);
+                intent.putExtra(Constants.LEFT_COUNT, leftNumber);
+                intent.putExtra(Constants.RIGHT_COUNT, rightNumber);
+                startedService = true;
+                getApplicationContext().startService(intent);
+            }
+
             rightEditText.setText(String.valueOf(rightNumber + 1));
         });
 
@@ -91,4 +127,24 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
             rightEditText.setText("0");
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        Intent intent = new Intent(this, PracticalTest01Service.class);
+        stopService(intent);
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(messageBroadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(messageBroadcastReceiver);
+        super.onPause();
+    }
+
 }
